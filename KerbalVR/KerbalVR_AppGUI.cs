@@ -238,7 +238,7 @@ namespace KerbalVR
 
             // manipulator size (VR "hands")
 #if DEBUG
-            GUILayout.BeginHorizontal();
+            /*GUILayout.BeginHorizontal();
             GUILayout.Label("Hand Size:", HighLogic.Skin.label);
             int handSizeScale = (int)(DeviceManager.Instance.ManipulatorSize * 100f + 0.5f);
             string handSizeStr = handSizeScale.ToString();
@@ -253,7 +253,7 @@ namespace KerbalVR
                     DeviceManager.Instance.ManipulatorSize = 0.45f;
                 }
             }
-            GUILayout.EndHorizontal();
+            GUILayout.EndHorizontal();*/
 #endif
 
             // world scale

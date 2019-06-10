@@ -204,6 +204,9 @@ namespace KerbalVR
                 Utils.Log("* allowMSAA? " + cam.allowMSAA);
                 Utils.Log("* depthTextureMode: " + cam.depthTextureMode);
             }
+
+            Camera currentCam = CameraManager.GetCurrentCamera();
+            Utils.Log("Current Camera: " + currentCam.name);
         }
 
         public static void PrintGameObject(GameObject go) {

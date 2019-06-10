@@ -45,7 +45,7 @@ namespace KerbalVR.Components
             try {
                 SoundEffect = ConfigUtils.SetupAudioClip(prop, configuration, "sound");
             } catch (Exception e) {
-                Utils.LogWarning(e.ToString());
+                // specifying a sound should be optional, so catch the error but don't print any warnings.
             }
 
             // output signal

@@ -172,6 +172,7 @@ namespace KerbalVR
         }
 
         private void SetupFlightIvaScene() {
+            Utils.Log("SetupFlightIvaScene");
             // use seated mode during IVA flight
             TrackingSpace = ETrackingUniverseOrigin.TrackingUniverseSeated;
 
@@ -195,6 +196,7 @@ namespace KerbalVR
         }
 
         private void SetupFlightEvaScene() {
+            Utils.Log("SetupFlightEvaScene");
             // use seated mode during EVA
             TrackingSpace = ETrackingUniverseOrigin.TrackingUniverseSeated;
 
@@ -319,11 +321,16 @@ namespace KerbalVR
             Quaternion updatedRotation = DevicePoseToWorld(hmdTransform.rot);
 
             // in flight, update the flight cameras
-            FlightCamera.fetch.transform.position = updatedPosition;
-            FlightCamera.fetch.transform.rotation = updatedRotation;
+            // FlightCamera.fetch.transform.position = updatedPosition;
+            // FlightCamera.fetch.transform.rotation = updatedRotation;
 
-            ScaledCamera.Instance.transform.position = updatedPosition;
-            ScaledCamera.Instance.transform.rotation = updatedRotation;
+            // ScaledCamera.Instance.transform.position = updatedPosition;
+            // ScaledCamera.Instance.transform.rotation = updatedRotation;
+
+            foreach (Types.CameraData cameraData in VRCameras) {
+                cameraData.camera.transform.position = updatedPosition;
+                cameraData.camera.transform.rotation = updatedRotation;
+            }
 
             // store the eyeball position
             HmdEyePosition[(int)eye] = updatedPosition;

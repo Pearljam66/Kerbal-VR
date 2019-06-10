@@ -231,7 +231,7 @@ namespace KerbalVR {
 #if DEBUG
             // debug hooks
             if (Input.GetKeyDown(KeyCode.Y)) {
-                // Utils.PrintAllCameras();
+                Utils.PrintAllCameras();
                 // Utils.PrintAllLayers();
                 Utils.PrintDebug();
                 // Utils.PrintFonts();
