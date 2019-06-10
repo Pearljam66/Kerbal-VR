@@ -148,6 +148,10 @@ namespace KerbalVR
             ControllerIndexLeft = OpenVR.System.GetTrackedDeviceIndexForControllerRole(ETrackedControllerRole.LeftHand);
             ControllerIndexRight = OpenVR.System.GetTrackedDeviceIndexForControllerRole(ETrackedControllerRole.RightHand);
 
+#if DEBUG
+            Utils.Log("ControllerIndexLeft = " + ControllerIndexLeft + ", ControllerIndexRight = " + ControllerIndexRight);
+#endif
+
             ManageManipulators();
         }
 
@@ -178,6 +182,8 @@ namespace KerbalVR
         /// <param name="role">The controller device role (left or right).</param>
         /// <returns>The GameObject for the "VR hand".</returns>
         protected GameObject CreateManipulator(ETrackedControllerRole role) {
+            Utils.Log("CreateManipulator, role = " + role);
+
             // create new GameObject
             GameObject manipulator = new GameObject("KVR_Manipulator_" + role.ToString());
             DontDestroyOnLoad(manipulator);

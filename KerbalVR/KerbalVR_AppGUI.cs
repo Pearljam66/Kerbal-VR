@@ -236,26 +236,6 @@ namespace KerbalVR
             labelStyleHeader.fontStyle = FontStyle.Bold;
             GUILayout.Label("Options", labelStyleHeader);
 
-            // manipulator size (VR "hands")
-#if DEBUG
-            GUILayout.BeginHorizontal();
-            GUILayout.Label("Hand Size:", HighLogic.Skin.label);
-            int handSizeScale = (int)(DeviceManager.Instance.ManipulatorSize * 100f + 0.5f);
-            string handSizeStr = handSizeScale.ToString();
-            handSizeStr = GUILayout.TextField(handSizeStr, HighLogic.Skin.textField);
-            if (GUI.changed) {
-                bool parseSuccess = System.Int32.TryParse(handSizeStr, out handSizeScale);
-                if (parseSuccess &&
-                    handSizeScale >= 1 &&
-                    handSizeScale <= 100) {
-                    DeviceManager.Instance.ManipulatorSize = handSizeScale * 0.01f;
-                } else {
-                    DeviceManager.Instance.ManipulatorSize = 0.45f;
-                }
-            }
-            GUILayout.EndHorizontal();
-#endif
-
             // world scale
             GUILayout.BeginHorizontal();
             GUILayout.Label("World Scale:", HighLogic.Skin.label);
