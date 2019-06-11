@@ -55,7 +55,7 @@ namespace KerbalVR
 
             // enable this object while VR is active
             // TODO: can we make this a little more efficient?
-            Utils.SetGameObjectChildrenActive(this.gameObject, Core.HmdIsEnabled);
+            // Utils.SetGameObjectChildrenActive(this.gameObject, Core.HmdIsEnabled);
 
             // apply logic once we have a Glove object
             if (gloveGameObject != null) {

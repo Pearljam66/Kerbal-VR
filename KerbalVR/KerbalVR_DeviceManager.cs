@@ -96,7 +96,7 @@ namespace KerbalVR
                 isDeviceConnected[i] = isConnected;
             }
 
-            OnTrackedDeviceRoleChanged(); //the events are NOT trustworthy!
+            // OnTrackedDeviceRoleChanged(); //the events are NOT trustworthy!
 
             // update poses for tracked devices
             SteamVR_Controller.Update();
@@ -140,6 +140,7 @@ namespace KerbalVR
         /// </summary>
         /// <param name="vrEvent">The OpenVR event data.</param>
         protected void OnTrackedDeviceRoleChanged(VREvent_t vrEvent) {
+            Utils.Log("OnTrackedDeviceRoleChanged event");
             OnTrackedDeviceRoleChanged();
         }
 

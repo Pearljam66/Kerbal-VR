@@ -617,9 +617,11 @@ namespace KerbalVR
             SteamVR_Utils.RigidTransform hmdTransform,
             SteamVR_Utils.RigidTransform hmdEyeTransform) {
 
-            // in flight, don't allow movement of the origin point
-            CurrentPosition = InitialPosition;
-            CurrentRotation = InitialRotation;
+            // move the rig to position the VR cameras
+            vrCameraRigEye[eye].transform.localPosition = hmdEyeTransform.pos;
+            vrCameraRigEye[eye].transform.localRotation = hmdEyeTransform.rot;
+            VrCameraRig.transform.position = DevicePoseToWorld(hmdTransform.pos);
+            VrCameraRig.transform.rotation = DevicePoseToWorld(hmdTransform.rot);
 
             // get position of your eyeball
             Vector3 positionToHmd = hmdTransform.pos;
