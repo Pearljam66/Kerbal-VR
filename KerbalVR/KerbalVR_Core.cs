@@ -71,7 +71,6 @@ namespace KerbalVR {
         // these arrays each hold one object for the corresponding eye, where
         // index 0 = Left_Eye, index 1 = Right_Eye
         private static Texture_t[] hmdEyeTexture = new Texture_t[2];
-        private static RenderTexture[] hmdEyeRenderTexture = new RenderTexture[2];
 
         // store the tracked device poses
         private static TrackedDevicePose_t[] devicePoses = new TrackedDevicePose_t[OpenVR.k_unMaxTrackedDeviceCount];
@@ -199,7 +198,6 @@ namespace KerbalVR {
                             (EVREye)i,
                             hmdTransform,
                             hmdEyeTransform[i],
-                            hmdEyeRenderTexture[i],
                             hmdEyeTexture[i]);
                     }
 
@@ -208,7 +206,7 @@ namespace KerbalVR {
 
                     // render to the game screen
                     if (RenderHmdToScreen) {
-                        Graphics.Blit(hmdEyeRenderTexture[0], null as RenderTexture);
+                        Graphics.Blit(Scene.Instance.HmdEyeRenderTextureL, null as RenderTexture);
                     }
 
                 } catch (Exception e) {
@@ -319,7 +317,6 @@ namespace KerbalVR {
             EVREye eye,
             SteamVR_Utils.RigidTransform hmdTransform,
             SteamVR_Utils.RigidTransform hmdEyeTransform,
-            RenderTexture hmdEyeRenderTexture,
             Texture_t hmdEyeTexture) {
 
             /**
@@ -345,26 +342,17 @@ namespace KerbalVR {
              *     InitialPosition and InitialRotation.
              */
 
-            // position of the eye in the VR reference frame
-            Vector3 positionToEye = hmdTransform.pos + hmdTransform.rot * hmdEyeTransform.pos;
-
             // update position of the cameras
             Scene.Instance.UpdateScene(eye, hmdTransform, hmdEyeTransform);
 
             // render the set of cameras
-            for (int i = 0; i < Scene.Instance.NumVRCameras; i++) {
-                Types.CameraData camData = Scene.Instance.VRCameras[i];
+            Scene.Instance.RenderVrCameras(eye);
 
-                // set projection matrix
-                camData.camera.projectionMatrix = (eye == EVREye.Eye_Left) ?
-                    camData.hmdProjectionMatrixL : camData.hmdProjectionMatrixR;
-
-                // set texture to render to, then render
-                camData.camera.targetTexture = hmdEyeRenderTexture;
-                camData.camera.Render();
+            if (eye == EVREye.Eye_Left) {
+                hmdEyeTexture.handle = Scene.Instance.HmdEyeRenderTextureL.GetNativeTexturePtr();
+            } else {
+                hmdEyeTexture.handle = Scene.Instance.HmdEyeRenderTextureR.GetNativeTexturePtr();
             }
-
-            hmdEyeTexture.handle = hmdEyeRenderTexture.GetNativeTexturePtr();
 
             // Submit frames to HMD
             EVRCompositorError vrCompositorError = OpenVR.Compositor.Submit(eye, ref hmdEyeTexture, ref hmdTextureBounds, EVRSubmitFlags.Submit_Default);
@@ -435,7 +423,7 @@ namespace KerbalVR {
                     textureType = ETextureType.DirectX;
                     break;
                 case UnityEngine.Rendering.GraphicsDeviceType.Direct3D12:
-                    textureType = ETextureType.DirectX;
+                    textureType = ETextureType.DirectX; // ironically, ETextureType.DirectX12 doesn't work
                     break;
                 default:
                     throw new InvalidOperationException(SystemInfo.graphicsDeviceType.ToString() + " not supported");
@@ -443,11 +431,12 @@ namespace KerbalVR {
 
             // initialize render textures (for displaying on HMD)
             for (int i = 0; i < 2; i++) {
-                hmdEyeRenderTexture[i] = new RenderTexture((int)renderTextureWidth, (int)renderTextureHeight, 24, RenderTextureFormat.ARGB32);
-                hmdEyeRenderTexture[i].Create();
-                hmdEyeTexture[i].handle = hmdEyeRenderTexture[i].GetNativeTexturePtr();
+                RenderTexture hmdEyeRenderTexture = new RenderTexture((int)renderTextureWidth, (int)renderTextureHeight, 24, RenderTextureFormat.ARGB32);
+                hmdEyeRenderTexture.Create();
+                hmdEyeTexture[i].handle = hmdEyeRenderTexture.GetNativeTexturePtr();
                 hmdEyeTexture[i].eColorSpace = EColorSpace.Auto;
                 hmdEyeTexture[i].eType = textureType;
+                Scene.Instance.SetVrCameraParameters((EVREye)i, hmdEyeRenderTexture);
             }
 
             // set rendering bounds on texture to render

@@ -175,7 +175,9 @@ namespace KerbalVR
 
         public static void PrintAllCameras() {
             Utils.Log("Scene: " + HighLogic.LoadedScene);
-            Utils.Log("CameraMode: " + CameraManager.Instance.currentCameraMode);
+            if (CameraManager.Instance != null) {
+                Utils.Log("CameraMode: " + CameraManager.Instance.currentCameraMode);
+            }
             for (int i = 0; i < Camera.allCamerasCount; i++) {
                 Camera cam = Camera.allCameras[i];
                 Utils.Log("Camera: " + cam.name);
